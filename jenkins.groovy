@@ -37,7 +37,7 @@ pipeline
                 git config --global user.email
                 set -x
                 git remote set-url origin https://github.com/rajeshbala01/sampleJenkin.git
-                git checkout branch master
+                git checkout -b master
                 git status
                 git add .
                 git commit -m "Pushing" | true

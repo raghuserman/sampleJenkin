@@ -26,18 +26,17 @@ pipeline
             """
             }
          }
-        stage('Push to Master...')
+        stage('Push to Master')
          {
           steps
-          
-            {
+              {
            echo "Push the code to Master"    
            sh"""
                 set +x
                 git config --global user.name 
                 git config --global user.email
                 set -x
-                git remote set-url origin https://github.com/santhoshvelusamy/Run-Apache.git
+                git remote set-url origin https://github.com/rajeshbala01/sampleJenkin.git
                 git status
                 git add .
                 git commit -m "Pushing" | true

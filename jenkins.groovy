@@ -25,6 +25,7 @@ pipeline
                 echo "Test Content" > test.txt
             """
             }
+         }
         stage('Push to Master...')
             {
            echo "Push the code to Master"    

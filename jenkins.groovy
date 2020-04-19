@@ -27,8 +27,9 @@ pipeline
             }
          }
         stage('Push to Master...')
+         {
           steps
-          {
+          
             {
            echo "Push the code to Master"    
            sh"""

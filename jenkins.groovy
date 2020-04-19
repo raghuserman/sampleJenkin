@@ -21,7 +21,7 @@ pipeline
             {
            echo "Update the build"
            sh"""
-                cd /"${workspace}"
+                cd "${workspace}"
                 echo "Test Content" > test.txt
             """
             }

@@ -18,8 +18,7 @@ pipeline {
             sh 'npm run build'
           }
         }
-      }
-    }
+          
     stage('Deployment') {
       parallel {
         stage('Staging') {

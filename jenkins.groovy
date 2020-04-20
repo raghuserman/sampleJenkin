@@ -29,7 +29,7 @@ pipeline {
             withAWS(region:'us-east-1',credentials:'aws-cloud-user') {
               s3Upload(bucket: 'rajeshbala', workingDir:'.', includePathPattern:'outboundFolder/');
             }
-            mail(subject: 'Production Build', body: 'New Deployment to Production', to: 'rajesh.bala@outlook.com')
+           
           }
         }
       }

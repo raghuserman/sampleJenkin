@@ -12,13 +12,13 @@ pipeline {
       parallel {
         stage('Staging') {
           when {
-            branch 'staging'
+            branch 'branch'
           }
           steps {
             withAWS(region:'us-east-1',credentials:'aws-cloud-user') {
 		    s3Upload(bucket: 'rajeshbala', workingDir:'.', includePathPattern:'html/');
             }
-            mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'jenkins-mailing-list@mail.com')
+            
           }
         }
         stage('Production') {
@@ -27,7 +27,8 @@ pipeline {
           }
           steps {
             withAWS(region:'us-east-1',credentials:'aws-cloud-user') {
-              s3Upload(bucket: 'rajeshbala', workingDir:'.', includePathPattern:'html/');
+            s3Upload(bucket: 'rajeshbala', workingDir:'.', includePathPattern:'html/');
+	    echo "Sucessfully uploaded the Html to S3 web hosting"
             }
            
           }

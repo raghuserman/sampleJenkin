@@ -1,49 +1,51 @@
-pipeline
-{
-    agent
-    {
-    node {
-        label 'windows'
+pipeline {
+  agent any
+  
+  stages {
+     
+    stage('Install Packages') {
+      steps {
+        sh 'npm install'
       }
     }
-    stages
-    {
-        stage('Start the Build')
-        {
-         steps
-            {
-           echo "start the build"
-            }
-        }
-        stage('Update the Build')
-         {
-         steps
-            {
-           echo "Update the build"
-           sh"""
-                cd "${workspace}"
-                echo "Test Content" > test.txt
-            """
-            }
-         }
-        stage('Push to Master')
-         {
-          steps
-              {
-           echo "Push the code to Master"    
-           sh"""
-                set +x
-                git config --global user.name 
-                git config --global user.email
-                set -x
-                git remote set-url origin https://github.com/rajeshbala01/sampleJenkin.git
-                git checkout -b master
-                git status
-                git add .
-                git commit -m "Pushing" | true
-                git push -u origin master
-                """ 
-            }
-        }
+	stage('Fetch the package from Git') {
+      steps {
+        echo "Pull the code from Git"
+      }
     }
+    stage('Create Build Artifacts') {
+          steps {
+            sh 'npm run build'
+          }
+        }
+      }
+    }
+    stage('Deployment') {
+      parallel {
+        stage('Staging') {
+          when {
+            branch 'staging'
+          }
+          steps {
+            withAWS(region:'<your-bucket-region>',credentials:'<AWS-Staging-Jenkins-Credential-ID>') {
+              s3Delete(bucket: '<bucket-name>', path:'**/*')
+              s3Upload(bucket: '<bucket-name>', workingDir:'build', includePathPattern:'**/*');
+            }
+            mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'jenkins-mailing-list@mail.com')
+          }
+        }
+        stage('Production') {
+          when {
+            branch 'master'
+          }
+          steps {
+            withAWS(region:'<your-bucket-region>',credentials:'<AWS-Production-Jenkins-Credential-ID>') {
+              s3Upload(bucket: 'rajeshbala', workingDir:'build', includePathPattern:'**/*');
+            }
+            mail(subject: 'Production Build', body: 'New Deployment to Production', to: 'rajesh.bala@outlook.com')
+          }
+        }
+      }
+    }
+  }
 }

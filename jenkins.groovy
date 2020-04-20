@@ -16,7 +16,7 @@ pipeline {
           }
           steps {
             withAWS(region:'us-east-1',credentials:'aws-cloud-user') {
-		    s3Upload(bucket: 'rajeshbala', workingDir:'outboundFolder', includePathPattern:'**/*');
+		    s3Upload(bucket: 'rajeshbala', workingDir:'.', includePathPattern:'**/*');
             }
             mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'jenkins-mailing-list@mail.com')
           }
@@ -27,7 +27,7 @@ pipeline {
           }
           steps {
             withAWS(region:'us-east-1',credentials:'aws-cloud-user') {
-              s3Upload(bucket: 'rajeshbala', workingDir:'outboundFolder', includePathPattern:'**/*');
+              s3Upload(bucket: 'rajeshbala', workingDir:'.', includePathPattern:'**/*');
             }
             mail(subject: 'Production Build', body: 'New Deployment to Production', to: 'rajesh.bala@outlook.com')
           }
